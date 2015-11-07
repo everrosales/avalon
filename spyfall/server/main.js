@@ -67,7 +67,7 @@ Meteor.publish('players', function(gameID) {
 Games.find({"state": 'settingUp'}).observeChanges({
   added: function (id, game) {
     var location = getRandomLocation();
-    var players = Players.find({gameID: id});
+    var players = Players.find({gameID: id}, {'sort': {'name': 1}});
     var gameEndTime = moment().add(game.lengthInMinutes, 'minutes').valueOf();
 
     var spyIndex = [];
