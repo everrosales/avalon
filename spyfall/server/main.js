@@ -1,3 +1,5 @@
+var spyCounts = {5:2, 6:2, 7:3, 8:3, 9:3, 10:4};
+
 function cleanUpGamesAndPlayers(){
   var cutOff = moment().subtract(2, 'hours').toDate().getTime();
 
@@ -68,12 +70,19 @@ Games.find({"state": 'settingUp'}).observeChanges({
     var players = Players.find({gameID: id});
     var gameEndTime = moment().add(game.lengthInMinutes, 'minutes').valueOf();
 
-    var spyIndex = Math.floor(Math.random() * players.count());
+    var spyIndex = [];
+    for ( var i = 0; i < spyCounts[players.fetch().length]; ++i) {
+      var nextSpy = Math.floor(Math.random() * players.count());
+      while (spyIndex.indexOf(nextSpy) != -1) {
+        nextSpy = Math.floor(Math.random() * players.count());
+      }
+      spyIndex.push(nextSpy);
+    }
     var firstPlayerIndex = Math.floor(Math.random() * players.count());
 
     players.forEach(function(player, index){
       Players.update(player._id, {$set: {
-        isSpy: index === spyIndex,
+        isSpy: spyIndex.indexOf(index) != -1,
         isFirstPlayer: index === firstPlayerIndex
       }});
     });
