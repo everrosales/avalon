@@ -422,6 +422,11 @@ Template.lobby.helpers({
   isLoading: function() {
     var game = getCurrentGame();
     return game.state === 'settingUp';
+  },
+  notEnoughPeople: function() {
+    var game = getCurrentGame();
+    console.log("here: " + Players.find({gameID: game._id}).fetch().length);
+    return Players.find({gameID: game._id}).fetch().length < 5;
   }
 });
 
@@ -429,7 +434,11 @@ Template.lobby.events({
   'click .btn-leave': leaveGame,
   'click .btn-start': function () {
     var game = getCurrentGame();
-    Games.update(game._id, {$set: {state: 'settingUp'}});
+    if (Players.find({gameID: game._id}).fetch().length >= 5) {
+      Games.update(game._id, {$set: {state: 'settingUp'}});
+    } else {
+      console.log("Too few players");
+    }
   },
   'click .btn-toggle-qrcode': function () {
     $(".qrcode-container").toggle();
