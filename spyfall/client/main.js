@@ -121,7 +121,7 @@ function generateNewGame(){
     propsal: [],
     approveVotes: null,
     rejectVote: null,
-    proposalCount: null,
+    proposalCount: 0,
     proposing: false,
     proposedMissionVoting: false,
     mission: false,

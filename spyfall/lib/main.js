@@ -1,4 +1,8 @@
-function rotateProposal() {
+function beginNextRound() {
+
+}
+
+function rotateProposal(gameID) {
 
 }
 
@@ -6,12 +10,22 @@ function submitProposal() {
 
 }
 
-function proposalApproved() {
+function proposalApproved(gameID) {
+  var game = Games.find({'accessCode': gameID}).fetch()[0];
+  Games.update(game._id, {$set : {'proposalCount': 0}});
+  beginMissionVoting(gameID);
 
 }
 
-function proposalRejected() {
-
+function proposalRejected(gameID) {
+  var game = Games.find({'accessCode': gameID}).fetch()[0];
+  if (game.proposalCount == 4) {
+    missionFail(game.accessCode);
+  } else {
+    game.proposalCount++;
+    Games.update(game._id, {$set: {'proposalCount': game.proposalCount}});
+    rotateProposal(gameID);
+  }
 }
 
 function beginApprovalVoting() {
@@ -20,7 +34,7 @@ function beginApprovalVoting() {
 
 function beginMissionVoting(gameID) {
   // Assumes that a proposal was approved and was thus set
-  var game = Games.find(gameID);
+  var game = Games.find({'accessCode': gameID}).fetch()[0];
   var playersOnMission = games.propsal;
   Players.find({}).forEach(function (player) {
     if (playersOnMission.indexOf(player.name) > -1) {
@@ -43,8 +57,13 @@ function missionPass(gameID) {
   }, 0);
   game.rounds[round] = "pass"
   Games.update(game._id, {$set: {rounds: game.rounds}});
+  Players.find({}).forEach(function (player) {
+    player.update(player._id, {$set: {'isOnMission': false}});
+  });
   if (round == 4) {
     endGame(gameID);
+  } else {
+    beginNextRound(gameID);
   }
 }
 
@@ -59,11 +78,16 @@ function missionFail(gameID) {
   }, 0);
   game.rounds[round] = "fail"
   Games.update(game._id, {$set: {rounds: game.rounds}});
+  Players.find({}).forEach(function (player) {
+    player.update(player._id, {$set: {'isOnMission': false}});
+  });
   if (round == 4) {
     endGame(gameID);
+  } else {
+    beginNextRound(gameID);
   }
 }
 
 function endGame(gameID) {
-
+  alert("game over");
 }
