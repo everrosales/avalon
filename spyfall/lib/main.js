@@ -10,6 +10,23 @@ function submitProposal() {
 
 }
 
+function addToProposal(gameID, username) {
+  var game = Games.find({'accessCode': gameID}).fetch()[0];
+  var proposedPlayers = game.proposal;
+  proposedPlayers.push(username);
+  game.update(game._id, {$set: {'proposal': proposedPlayers}});
+}
+
+function removeFromPropsal(gameID, username) {
+  var game = Games.find({'accessCode': gameID}).fetch()[0];
+  var proposedPlayers = game.proposal;
+  var targetPlayer = proposedPlayers.indexOf(username);
+  if (targetPlayer > -1) {
+    delete proposedPlayers[targetPlayer];
+  }
+  game.update(game._id, {$set: {'proposal': proposedPlayers}});
+}
+
 function proposalApproved(gameID) {
   var game = Games.find({'accessCode': gameID}).fetch()[0];
   Games.update(game._id, {$set : {'proposalCount': 0}});
