@@ -112,10 +112,20 @@ function generateNewGame(){
     accessCode: generateAccessCode(),
     state: "waitingForPlayers",
     location: null,
-    lengthInMinutes: 8,
+    lengthInMinutes: 20,
     endTime: null,
     paused: false,
-    pausedTime: null
+    pausedTime: null,
+
+    rounds: [null, null, null, null, null],
+    approveVotes: null,
+    rejectVote: null,
+    proposalCount: null,
+    proposing: false,
+    proposedMissionVoting: false,
+    mission: false,
+
+    onMission: null
   };
 
   var gameID = Games.insert(game);
@@ -130,7 +140,10 @@ function generateNewPlayer(game, name){
     name: name,
     role: null,
     isSpy: false,
-    isFirstPlayer: false
+    isFirstPlayer: false,
+    isProposing: false,
+    voted: false,
+    isOnMission: false,
   };
 
   var playerID = Players.insert(player);

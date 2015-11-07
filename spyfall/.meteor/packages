@@ -12,7 +12,6 @@ mrt:cron-tick
 mrt:qrcodesvg
 iron:router
 tap:i18n
-
 amplify
 mrt:flash-messages
 less

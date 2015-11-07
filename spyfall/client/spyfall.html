@@ -135,6 +135,89 @@
         </div>
       {{/if}}
     </div>
+
+      {{#if game.mission}}
+      <div class="on-mission">
+        {{#if player.isOnMission}}
+          <p>
+            You're on the mission
+          </p>
+          {{#if player.voted}}
+            <p>
+              Awaiting mission results
+            </p>
+          {{else}}
+            {{#if player.isSpy}}
+              <button type="submit" name="missionVote" value="fail">Fail</button>
+            {{/if}}
+            <button type="submit" name="missionVote" value="pass">Pass</button>
+          {{/if}}
+        {{else}}
+          <p>
+            Awaiting mission results
+          </p>
+        {{/if}}
+      </div>
+      {{/if}}
+
+      {{#if game.proposedMissionVoting}}
+        <div class="mission-proposal">
+          {{#if player.voted}}
+          <p>
+            Waiting the results of the proposal.
+          </p>
+            <p>
+              Votes in favor: {{game.approveVotes}}, Votes against: {{game.rejectVotes}},
+              Out of: {{players.length}}
+            </p>
+          {{else}}
+            <p>
+              Mission Proposed:
+            </p>
+            <ul>
+              {{#each proposal}}
+                <li>
+                  {{this}}
+                </li>
+              {{/each}}
+            </ul>
+
+            <button type="submit" name="proposalVote" value="approve">Approve</button>
+            <button type="submit" name="proposalVote" value="reject">Reject</button>
+          {{/if}}
+        </div>
+      {{/if}}
+
+      {{#if game.proposing}}
+        <div class="is-proposing">
+        {{#if player.isProposing}}
+          <p>
+            You are proposing the mission
+          </p>
+        {{else}}
+          <p>
+            Waiting for mission proposal
+          </p>
+          {{/if}}
+        </div>
+      {{/if}}
+  </div>
+
+  <h5>Game status</h5>
+  <div class="game-status">
+    <ul class="round-list">
+      {{#each game.rounds}}
+        <li>
+          <div class="round-marker">
+            {{#if this }}
+            {{this}}
+            {{else}}
+            Pending
+            {{/if}}
+          </div>
+        </li>
+      {{/each}}
+    </ul>
   </div>
 
   <h5>{{_ "ui.players" }}</h5>
@@ -152,7 +235,7 @@
   </ul>
 
   <div class="u-cf"></div>
-  
+
   <h5>{{_ "ui.location reference" }}</h5>
   <ul class="location-list">
     {{#each locations }}
@@ -181,7 +264,7 @@
 
   <hr>
 
-  <form id="create-game">  
+  <form id="create-game">
     <div class="">
       <input type="text" id="player-name" name="playerName" placeholder='{{_ "ui.enter your name" }}'>
 
@@ -204,7 +287,7 @@
 
   <hr>
 
-  <form id="join-game">  
+  <form id="join-game">
     <div>
       <input autocorrect="off" autocapitalize="off" type="text" id="access-code" name="accessCode" placeholder='{{_ "ui.enter an access code" }}'>
       <input type="text" id="player-name" name="playerName" placeholder='{{_ "ui.enter your name" }}'>
