@@ -14,7 +14,6 @@ function proposalApproved(gameID) {
   var game = Games.find({'accessCode': gameID}).fetch()[0];
   Games.update(game._id, {$set : {'proposalCount': 0}});
   beginMissionVoting(gameID);
-
 }
 
 function proposalRejected(gameID) {

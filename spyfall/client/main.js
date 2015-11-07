@@ -122,7 +122,7 @@ function generateNewGame(){
     approveVotes: null,
     rejectVote: null,
     proposalCount: 0,
-    proposing: false,
+    proposing: true,
     proposedMissionVoting: false,
     mission: false,
 
