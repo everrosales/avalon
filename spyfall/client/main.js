@@ -532,9 +532,11 @@ Template.gameView.events({
     }
   },
   'click .player-name': function (event) {
-    event.target.className = 'player-name-striked';
+    if (getCurrentPlayer().isProposing) {
+        event.target.className = 'player-name-selected';
+    }
   },
-  'click .player-name-striked': function(event) {
+  'click .player-name-selected': function(event) {
     event.target.className = 'player-name';
   },
   'click .location-name': function (event) {
