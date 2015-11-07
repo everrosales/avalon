@@ -44,7 +44,7 @@ function getLanguageList() {
   var languages = TAPi18n.getLanguages();
   var languageList = _.map(languages, function(value, key) {
     var selected = "";
-    
+
     if (key == getUserLanguage()){
       selected = "selected";
     }
@@ -61,11 +61,11 @@ function getLanguageList() {
       languageDetails: value
     };
   });
-  
+
   if (languageList.length <= 1){
     return null;
   }
-  
+
   return languageList;
 }
 
@@ -174,8 +174,7 @@ function trackGameState () {
   }
 }
 
-function leaveGame () {  
-  GAnalytics.event("game-actions", "gameleave");
+function leaveGame () {
   var player = getCurrentPlayer();
 
   Session.set("currentView", "startMenu");
@@ -203,7 +202,7 @@ if (hasHistoryApi()){
     } else {
       accessCode = Session.get('urlAccessCode');
     }
-    
+
     var currentURL = '/';
     if (accessCode){
       currentURL += accessCode+'/';
@@ -242,12 +241,10 @@ Template.footer.events({
   'click .btn-set-language': function (event) {
     var language = $(event.target).data('language');
     setUserLanguage(language);
-    GAnalytics.event("language-actions", "set-language-" + language);
   },
   'change .language-select': function (event) {
     var language = event.target.value;
     setUserLanguage(language);
-    GAnalytics.event("language-actions", "set-language-" + language);
   }
 })
 
@@ -262,20 +259,16 @@ Template.startMenu.events({
 
 Template.startMenu.helpers({
   alternativeURL: function() {
-    return Meteor.settings.public.alternative;
+    return "#";//Meteor.settings.public.alternative;
   }
 });
 
 Template.startMenu.rendered = function () {
-  GAnalytics.pageview("/");
-
   resetUserState();
 };
 
 Template.createGame.events({
   'submit #create-game': function (event) {
-    GAnalytics.event("game-actions", "newgame");
-
     var playerName = event.target.playerName.value;
 
     if (!playerName || Session.get('loading')) {
@@ -288,7 +281,7 @@ Template.createGame.events({
     Meteor.subscribe('games', game.accessCode);
 
     Session.set("loading", true);
-    
+
     Meteor.subscribe('players', game._id, function onReady(){
       Session.set("loading", false);
 
@@ -317,8 +310,6 @@ Template.createGame.rendered = function (event) {
 
 Template.joinGame.events({
   'submit #join-game': function (event) {
-    GAnalytics.event("game-actions", "gamejoin");
-
     var accessCode = event.target.accessCode.value;
     var playerName = event.target.playerName.value;
 
@@ -353,7 +344,7 @@ Template.joinGame.events({
         Session.set("currentView", "lobby");
       } else {
         FlashMessages.sendError(TAPi18n.__("ui.invalid access code"));
-        GAnalytics.event("game-actions", "invalidcode");
+        //GAnalytics.event("game-actions", "invalidcode");
       }
     });
 
@@ -424,8 +415,6 @@ Template.lobby.helpers({
 Template.lobby.events({
   'click .btn-leave': leaveGame,
   'click .btn-start': function () {
-    GAnalytics.event("game-actions", "gamestart");
-
     var game = getCurrentGame();
     Games.update(game._id, {$set: {state: 'settingUp'}});
   },
@@ -473,7 +462,7 @@ Template.gameView.helpers({
   player: getCurrentPlayer,
   players: function () {
     var game = getCurrentGame();
-    
+
     if (!game){
       return null;
     }
@@ -502,8 +491,6 @@ Template.gameView.helpers({
 Template.gameView.events({
   'click .btn-leave': leaveGame,
   'click .btn-end': function () {
-    GAnalytics.event("game-actions", "gameend");
-
     var game = getCurrentGame();
     Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
   },
@@ -515,11 +502,9 @@ Template.gameView.events({
     var currentServerTime = TimeSync.serverTime(moment());
 
     if(game.paused){
-      GAnalytics.event("game-actions", "unpause");
       var newEndTime = game.endTime - game.pausedTime + currentServerTime;
       Games.update(game._id, {$set: {paused: false, pausedTime: null, endTime: newEndTime}});
     } else {
-      GAnalytics.event("game-actions", "pause");
       Games.update(game._id, {$set: {paused: true, pausedTime: currentServerTime}});
     }
   },

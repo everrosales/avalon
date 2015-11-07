@@ -1,8 +1,5 @@
 {
     "public": {
-        "ga": {
-            "account": "UA-XXXXXXXX-X"
-        },
         "url": "http://example.com/"
     }
 }

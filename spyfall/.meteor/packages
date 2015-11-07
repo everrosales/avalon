@@ -9,7 +9,6 @@ jquery
 mizzao:timesync
 momentjs:moment
 mrt:cron-tick
-datariot:ganalytics
 mrt:qrcodesvg
 iron:router
 tap:i18n
