@@ -118,6 +118,7 @@ function generateNewGame(){
     pausedTime: null,
 
     rounds: [null, null, null, null, null],
+    propsal: [],
     approveVotes: null,
     rejectVote: null,
     proposalCount: null,
