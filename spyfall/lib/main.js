@@ -3,7 +3,18 @@ function beginNextRound() {
 }
 
 function rotateProposal(gameID) {
-
+  var game = Games.find({'accessCode':gameID}).fetch()[0];
+  Games.update(game._id, {$set: {'proposal': []}});
+  var players = Players.find({'gameID': game._id}, {'sort': {'name': 1}}).fetch();
+  //var currentProposalPlayer;
+  var i;
+  for (i = 0; i < players.length; i++) {
+    if (players[i].isProposing) {
+      break;
+    }
+  }
+  Players.update(players[(i+1) % players.length]._id, {$set: {'isProposing': true}})
+  Players.update(players[i]._id, {$set: {'isProposing': false}});
 }
 
 function submitProposal() {
