@@ -706,7 +706,6 @@ Template.gameView.events({
     var player = getCurrentPlayer();
     Players.update(player._id, {$set: {'voted': true, 
         'approvalVote': event.target.dataset.value == "approve"}});
-    console.log(vent.target.dataset.value);
     if (Players.find({ 'gameID': Session.get("gameID"), 
         'voted' : false}).count() == 0) {
       var players = Players.find({ 'gameID': Session.get("gameID")}).fetch();
