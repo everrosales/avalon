@@ -265,8 +265,8 @@ function generateNewGame(){
 
     rounds: [null, null, null, null, null],
     //propsal: [],
-    approveVotes: null,
-    rejectVote: null,
+    approveVotes: 0,
+    rejectVotes: 0,
     proposal: null,
     proposalCount: 0,
     proposing: true,
@@ -293,6 +293,7 @@ function generateNewPlayer(game, name){
     isProposing: false,
     isOnProposedMission: false,
     voted: false,
+    approvalVote: false,
     isOnMission: false,
   };
 
@@ -704,5 +705,30 @@ Template.gameView.events({
   },
   'click .btn-proposal-submit': function() {
     submitProposal();
+  },
+  'click .proposalVote': function(event) {
+    var player = getCurrentPlayer();
+    Players.update(player._id, {$set: {'voted': true, 
+        'approvalVote': event.target.dataset.value == "approve"}});
+    if (Players.find({ 'gameID': Session.get("gameID"), 
+        'voted' : false}).count() == 0) {
+      var players = Players.find({ 'gameID': Session.get("gameID")}).fetch();
+      var approves = 0;
+      var rejects = 0;
+      for (var i = 0; i < players.length; ++i) {
+        if (players[i].approvalVote) {
+          approves++;
+        } else {
+          rejects++;
+        }
+      }
+      Games.update(game._id, 
+          {$set: {'approveVotes': approves, 'rejectVotes': rejects}});
+      if (approves > rejects) {
+        proposalApproved(Session.get("gameID"));
+      } else {
+        proposalRejected(Session.get("gameID"));
+      }
+    }
   }
 });
