@@ -110,9 +110,9 @@
 
     <div class="status-container-content">
       {{#if player.isSpy }}
-        <div class="player-status player-status-spy">{{_ "You are a Spy" }}</div>
+        <div class="player-status player-status-spy">{{player.name}}, you are a spy</div>
       {{else}}
-        <div class="player-status player-status-not-spy">{{{_ "You are Resistance" }}}</div>
+        <div class="player-status player-status-not-spy">{{player.name}}, you are resistance</div>
       {{/if}}
     </div>
 
@@ -181,6 +181,48 @@
           {{/if}}
         </div>
       {{/if}}
+
+      {{#if gameEnd}}
+        {{#if player.isSpy}}
+          {{#if spyVictory}}
+            <p class="win">You win, resistance loses!</p>
+          {{else}}
+            <p class="lose">You lose, resistance wins!</p>
+          {{/if}}
+        {{else}}
+          {{#if spyVictory}}
+            <p class="lose">You lose, spies win!</p>
+          {{else}}
+            <p class="win">You win, spies lose!</p>
+            {{/if}}
+        {{/if}}
+        <div class="resitance-list">
+          <div>Resistance:</div>
+          <ul>
+            {{#each players}}
+              {{#unless isSpy}}
+              <li>
+                {{name}}
+              </li>
+              {{/unless}}
+            {{/each}}
+          </ul>
+        </div>
+        <div class="spy-list">
+          <div>Spies:</div>
+          <ul>
+            {{#each players}}
+              {{#if isSpy}}
+              <li>
+                {{name}}
+              </li>
+              {{/if}}
+            {{/each}}
+          </ul>
+        </div>
+      <div class="clear"></div>
+      {{/if}}
+
   </div>
 
   <h5>Game status</h5>
@@ -222,7 +264,7 @@
   <div class="u-cf"></div>
   {{#if game.proposing}}
     {{#if player.isProposing}}
-      <div>You are proposing! Select {{numPlayersNeededOnMission}} people from above.</div>
+      <p>You are proposing! Select {{numPlayersNeededOnMission}} people from above.</p>
       <button class="btn-proposal-submit">Submit Proposal</button>
     {{/if}}
   {{/if}}
