@@ -110,9 +110,9 @@
 
     <div class="status-container-content">
       {{#if player.isSpy }}
-        <div class="player-status player-status-spy">{{_ "You are a Spy" }}</div>
+        <div class="player-status player-status-spy">{{player.name}}, you are a spy</div>
       {{else}}
-        <div class="player-status player-status-not-spy">{{{_ "You are Resistance" }}}</div>
+        <div class="player-status player-status-not-spy">{{player.name}}, you are resistance</div>
       {{/if}}
     </div>
 
@@ -181,6 +181,45 @@
           {{/if}}
         </div>
       {{/if}}
+
+      {{#if gameEnd}}
+        {{#if player.isSpy}}
+          {{#if spyVictory}}
+            <div class="win">You win, resistance loses!</div>
+          {{else}}
+            <div class="lose">You lose, resistance wins!</div>
+        {{else}}
+          {{#if spyVictory}}
+            <div class="lose">You lose, spies win!</div>
+          {{else}}
+            <div class="win">You win, spies lose!</div>
+        {{/if}}
+        <div class="resitance-list">
+          <h4>Resistance:</h4>
+          <ul>
+            {{#each players}}
+              {{#if !isSpy}}
+              <li>
+                {{name}}
+              </li>
+              {{/if}}
+            {{/each}}
+          </ul>
+        </div>
+        <div class="spy-list">
+          <h4>Spies:</h4>
+          <ul>
+            {{#each players}}
+              {{#if isSpy}}
+              <li>
+                {{name}}
+              </li>
+              {{/if}}
+            {{/each}}
+          </ul>
+        </div>
+      {{/if}}
+
   </div>
 
   <h5>Game status</h5>
