@@ -5,6 +5,17 @@ var numOnMission = { 5: [2,3,2,3,3],
                      9: [3,4,4,5,5],
                     10: [3,4,4,5,5]};
 
+function getNumMissionPlayers() {
+  var game = getCurrentGame();
+  var i;
+  for(i = 0; i < game.rounds.length; ++i) {
+    if (game.rounds[i] == null) {
+      break;
+    }
+  }
+  return numOnMission[Players.find({gameID: game._id}).fetch().length][i];
+}
+
 function rotateProposal() {
 
 }
@@ -20,7 +31,7 @@ function addToProposal(gameID, username) {
   game.update(game._id, {$set: {'proposal': proposedPlayers}});
 }
 
-function removeFromPropsal(gameID, username) {
+function removeFromProposal(gameID, username) {
   var game = Games.find({'accessCode': gameID}).fetch()[0];
   var proposedPlayers = game.proposal;
   var targetPlayer = proposedPlayers.indexOf(username);
@@ -69,6 +80,7 @@ function missionPass(gameID) {
   }, 0);
   game.rounds[round] = "pass"
   Games.update(game._id, {$set: {rounds: game.rounds}});
+  Games.update(game._id, {$set: {numOnMission: getNumMissionPlayers()}});
   if (round == 4) {
     endGame(gameID);
   }
@@ -85,6 +97,7 @@ function missionFail(gameID) {
   }, 0);
   game.rounds[round] = "fail"
   Games.update(game._id, {$set: {rounds: game.rounds}});
+  Games.update(game._id, {$set: {numOnMission: getNumMissionPlayers()}});
   if (round == 4) {
     endGame(gameID);
   }

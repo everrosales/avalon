@@ -222,7 +222,7 @@
   <ul class="ingame-player-list">
     {{#each players }}
       <li>
-        <div class="player-name" name="{{name}}">
+        <div class="player-name" data-name="{{name}}">
           {{ name }}
           {{#if player.isSpy}}
             {{#if isSpy }}
@@ -240,7 +240,7 @@
   <div class="u-cf"></div>
 
   {{#if player.isProposing}}
-    <div>You are proposing! Select # people from above.</div>
+    <div>You are proposing! Select {{game.numOnMission}} people from above.</div>
     <button class="btn-proposal-submit">Submit Proposal</button>
   {{/if}}
 
@@ -280,7 +280,7 @@
     {{#if isLoading }}
       <span class="spinner"></span>
     {{else}}
-      {{_ "ui.welcome to spyfall" }}
+      {{_ "Welcome to Avalon!" }}
     {{/if}}
   </h4>
 

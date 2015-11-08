@@ -125,7 +125,7 @@ function generateNewGame(){
     proposing: true,
     proposedMissionVoting: false,
     mission: false,
-    numOnProposal: 0,
+    numOnMission: 0,
 
     onMission: null
   };
@@ -438,8 +438,7 @@ Template.lobby.events({
     var game = getCurrentGame();
     if (Players.find({gameID: game._id}).fetch().length >= 5) {
       Games.update(game._id, {$set: {state: 'settingUp'}});
-      Games.update(game._id, {$set: {numOnProposal: 
-          numOnMission[Players.find({gameID: game._id}).fetch().length][0]}});
+      Games.update(game._id, {$set: {numOnMission: getNumMissionPlayers()}});
     } else {
       console.log("Too few players");
     }
@@ -536,12 +535,13 @@ Template.gameView.events({
   },
   'click .player-name': function (event) {
     if (getCurrentPlayer().isProposing) {
-        addToProposal(Session.get("gameID"), event.target.name);
-        event.target.className = 'player-name-selected';
+      event.target.className = 'player-name-selected';
+      console.log("name: " + event.target.data);
+      addToProposal(Session.get("gameID"), event.target.data('name'));
     }
   },
   'click .player-name-selected': function(event) {
-    removeFromProposal(Session.get("gameID"), event.target.name);
+    removeFromProposal(Session.get("gameID"), event.target.data('name'));
     event.target.className = 'player-name';
   },
   'click .location-name': function (event) {
