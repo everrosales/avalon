@@ -125,13 +125,13 @@ function beginApprovalVoting() {
 
 function beginMissionVoting(gameID) {
   // Assumes that a proposal was approved and was thus set
-  var game = Games.find(gameID);
+  var game = Games.find(gameID).fetch()[0];
   //var playersOnMission = games.propsal;
-  Players.find({'gameID': game._id, 'isOnProposedMission': false}).forEach(function(player) {
-    player.update(player._id, {$set: {'isOnMission': false}});
+  Players.find({'gameID': game._id, 'isOnProposedMission': false}).fetch().forEach(function (player) {
+    Players.update(player._id, {$set: {'isOnMission': false, 'voted': false, 'approvalVote': null}});
   });
-  Players.find({'gameID': game._id, 'isOnProposedMission': true}).forEach(function (player) {
-    player.update(player._id, {$set: {'isOnMission': true}});
+  Players.find({'gameID': game._id, 'isOnProposedMission': true}).fetch().forEach(function (player) {
+    Players.update(player._id, {$set: {'isOnMission': true, 'voted': false, 'approvalVote': null}});
   });
   Games.update(game._id, {$set : {'proposing': false, 'proposedMissionVoting': false, 'mission': true}});
 }
@@ -712,7 +712,7 @@ Template.gameView.events({
     submitProposal();
   },
   'click .proposalVote': function(event) {
-    Players.update(player._id, {$set: {'voted': true,
+    Players.update(getCurrentPlayer()._id, {$set: {'voted': true,
         'approvalVote': event.target.dataset.value}});
     if (Players.find({ 'gameID': Session.get("gameID"),
         'voted' : false}).count() == 0) {
