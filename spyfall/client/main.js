@@ -697,7 +697,7 @@ Template.gameView.helpers({
     return getCurrentGame().victor != null;
   },
   spyVictory: function() {
-    return getCurrentGame().victor;
+    return getCurrentGame().victor == 'spy';
   }
 });
 
