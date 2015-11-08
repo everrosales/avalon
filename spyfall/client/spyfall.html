@@ -238,10 +238,11 @@
   </ul>
 
   <div class="u-cf"></div>
-
-  {{#if player.isProposing}}
-    <div>You are proposing! Select {{game.numOnMission}} people from above.</div>
-    <button class="btn-proposal-submit">Submit Proposal</button>
+  {{#if game.proposing}}
+    {{#if player.isProposing}}
+      <div>You are proposing! Select {{game.numOnMission}} people from above.</div>
+      <button class="btn-proposal-submit">Submit Proposal</button>
+    {{/if}}
   {{/if}}
 
   <hr>

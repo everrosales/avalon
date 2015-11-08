@@ -74,6 +74,12 @@ function missionFail(gameID) {
 }
 
 function submitProposal() {
+  var game = getCurrentGame();
+  if (Players.find({ 'gameID': Session.get("gameID"), 
+            'isOnProposedMission' : true}).count() == getNumMissionPlayers()) {
+    Games.update(game._id, {$set : 
+        {'proposing': false, 'proposedMissionVoting': true}});
+  }
 }
 
 var addToProposal = function(gameID, username) {
