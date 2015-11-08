@@ -19,7 +19,7 @@ function getNumMissionPlayers() {
       break;
     }
   }
-  return numOnMission[Players.find({gameID: game._id}).fetch().length][i];
+  return numOnMission[Players.find({'gameID': game._id}).fetch().length][i];
 }
 
 function rotateProposal(accessCode) {
@@ -74,7 +74,7 @@ function missionFail(accessCode) {
   Players.find({'gameID': Session.get('gameID'), 'isOnProposedMission':true}).forEach(function(player) {
     Players.update(player._id, {$set: {'isOnProposedMission': false}});
   });
-  Games.update(game._id, {$set : {'proposalCount': 0, 'proposing': true, 
+  Games.update(game._id, {$set : {'proposalCount': 0, 'proposing': true,
       'proposedMissionVoting': false, 'mission': false}});
   rotateProposal(accessCode);
 }
@@ -668,6 +668,9 @@ Template.gameView.helpers({
   },
   totalVotesNeeded: function() {
     return Players.find({'gameID': Session.get('gameID')}).count();
+  },
+  numPlayersNeededOnMission: function() {
+    return getNumMissionPlayers();
   }
 });
 
