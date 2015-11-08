@@ -118,7 +118,7 @@ function generateNewGame(){
     pausedTime: null,
 
     rounds: [null, null, null, null, null],
-    propsal: [],
+    //propsal: [],
     approveVotes: null,
     rejectVote: null,
     proposalCount: 0,
@@ -144,6 +144,7 @@ function generateNewPlayer(game, name){
     isSpy: false,
     isFirstPlayer: false,
     isProposing: false,
+    isOnProposedMission: false,
     voted: false,
     isOnMission: false,
   };
@@ -438,7 +439,7 @@ Template.lobby.events({
     var game = getCurrentGame();
     if (Players.find({gameID: game._id}).fetch().length >= 5) {
       Games.update(game._id, {$set: {state: 'settingUp'}});
-      Games.update(game._id, {$set: {numOnProposal: 
+      Games.update(game._id, {$set: {numOnProposal:
           numOnMission[Players.find({gameID: game._id}).fetch().length][0]}});
     } else {
       console.log("Too few players");

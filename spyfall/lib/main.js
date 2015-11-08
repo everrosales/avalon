@@ -1,10 +1,11 @@
-var numOnMission = { 5: [2,3,2,3,3],
-                     6: [2,3,4,3,4],
-                     7: [2,3,3,4,4],
-                     8: [3,4,4,5,5],
-                     9: [3,4,4,5,5],
-                    10: [3,4,4,5,5]
-                  };
+var numOnMission = {
+     5: [2,3,2,3,3],
+     6: [2,3,4,3,4],
+     7: [2,3,3,4,4],
+     8: [3,4,4,5,5],
+     9: [3,4,4,5,5],
+    10: [3,4,4,5,5]
+  };
 
 function rotateProposal(gameID) {
   var game = Games.find({'accessCode':gameID}).fetch()[0];
@@ -62,20 +63,29 @@ function submitProposal() {
 }
 
 function addToProposal(gameID, username) {
-  var game = Games.find({'accessCode': gameID}).fetch()[0];
+  var player = Players.find({'name': username, 'gameID': gameID}).fetch()[0];
+  Players.update(player._id, {$set: {'isOnProposedMission': true}});
+  /*var game = Games.find({'accessCode': gameID}).fetch()[0];
   var proposedPlayers = game.proposal;
   proposedPlayers.push(username);
-  game.update(game._id, {$set: {'proposal': proposedPlayers}});
+  game.update(game._id, {$set: {'proposal': proposedPlayers}});*/
 }
 
-function removeFromPropsal(gameID, username) {
-  var game = Games.find({'accessCode': gameID}).fetch()[0];
+function removeFromProposal(gameID, username) {
+  var player = Players.find({'name': username, 'gameID': gameID}).fetch()[0];
+  Players.update(player._id, {$set: {'isOnProposedMission': false}});
+  /*var game = Games.find({'accessCode': gameID}).fetch()[0];
   var proposedPlayers = game.proposal;
   var targetPlayer = proposedPlayers.indexOf(username);
   if (targetPlayer > -1) {
     delete proposedPlayers[targetPlayer];
   }
-  game.update(game._id, {$set: {'proposal': proposedPlayers}});
+  game.update(game._id, {$set: {'proposal': proposedPlayers}});*/
+}
+
+function toggleFromProposal(gameID, username) {
+  var player = Players.find({'name': username, 'gameID': gameID}).fetch()[0];
+  Players.update(player._id, {$set: {'isOnProposedMission': !player.isOnProposedMission}});
 }
 
 function proposalApproved(gameID) {
