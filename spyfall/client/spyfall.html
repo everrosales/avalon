@@ -185,29 +185,31 @@
       {{#if gameEnd}}
         {{#if player.isSpy}}
           {{#if spyVictory}}
-            <div class="win">You win, resistance loses!</div>
+            <p class="win">You win, resistance loses!</p>
           {{else}}
-            <div class="lose">You lose, resistance wins!</div>
+            <p class="lose">You lose, resistance wins!</p>
+          {{/if}}
         {{else}}
           {{#if spyVictory}}
-            <div class="lose">You lose, spies win!</div>
+            <p class="lose">You lose, spies win!</p>
           {{else}}
-            <div class="win">You win, spies lose!</div>
+            <p class="win">You win, spies lose!</p>
+            {{/if}}
         {{/if}}
         <div class="resitance-list">
-          <h4>Resistance:</h4>
+          <div>Resistance:</div>
           <ul>
             {{#each players}}
-              {{#if !isSpy}}
+              {{#unless isSpy}}
               <li>
                 {{name}}
               </li>
-              {{/if}}
+              {{/unless}}
             {{/each}}
           </ul>
         </div>
         <div class="spy-list">
-          <h4>Spies:</h4>
+          <div>Spies:</div>
           <ul>
             {{#each players}}
               {{#if isSpy}}
@@ -218,6 +220,7 @@
             {{/each}}
           </ul>
         </div>
+      <div class="clear"></div>
       {{/if}}
 
   </div>
@@ -261,7 +264,7 @@
   <div class="u-cf"></div>
   {{#if game.proposing}}
     {{#if player.isProposing}}
-      <div>You are proposing! Select {{numPlayersNeededOnMission}} people from above.</div>
+      <p>You are proposing! Select {{numPlayersNeededOnMission}} people from above.</p>
       <button class="btn-proposal-submit">Submit Proposal</button>
     {{/if}}
   {{/if}}
