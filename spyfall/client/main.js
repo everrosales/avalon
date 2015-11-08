@@ -71,7 +71,11 @@ function missionFail(accessCode) {
   if (round == 4) {
     endGame(accessCode);
   }
-  Games.update(game._id, {$set : {'proposalCount': 0}});
+  Players.find({'gameID': Session.get('gameID'), 'isOnProposedMission':true}).forEach(function(player) {
+    Players.update(player._id, {$set: {'isOnProposedMission': false}});
+  });
+  Games.update(game._id, {$set : {'proposalCount': 0, 'proposing': true, 
+      'proposedMissionVoting': false, 'mission': false}});
   rotateProposal(accessCode);
 }
 
