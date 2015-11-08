@@ -727,8 +727,6 @@ Template.gameView.events({
           rejects++;
         }
       }
-      Games.update(game._id,
-          {$set: {'approveVotes': approves, 'rejectVotes': rejects}});
       if (approves > rejects) {
         proposalApproved(Session.get("gameID"));
       } else {
