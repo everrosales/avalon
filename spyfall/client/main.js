@@ -118,7 +118,7 @@ function generateNewGame(){
     pausedTime: null,
 
     rounds: [null, null, null, null, null],
-    propsal: [],
+    //propsal: [],
     approveVotes: null,
     rejectVote: null,
     proposalCount: 0,
@@ -144,6 +144,7 @@ function generateNewPlayer(game, name){
     isSpy: false,
     isFirstPlayer: false,
     isProposing: false,
+    isOnProposedMission: false,
     voted: false,
     isOnMission: false,
   };
