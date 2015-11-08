@@ -128,9 +128,9 @@
             </p>
           {{else}}
             {{#if player.isSpy}}
-              <button type="submit" name="missionVote" value="fail">Fail</button>
+              <button type="submit" class="missionVote" data-value="fail">Fail</button>
             {{/if}}
-            <button type="submit" name="missionVote" value="pass">Pass</button>
+            <button type="submit" class="missionVote" data-value="pass">Pass</button>
           {{/if}}
         {{else}}
           <p>
