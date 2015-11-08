@@ -113,24 +113,6 @@
         <div class="player-status player-status-spy">{{_ "You are a Spy" }}</div>
       {{else}}
         <div class="player-status player-status-not-spy">{{{_ "You are Resistance" }}}</div>
-
-        <div class="current-location">
-          <div class="current-location-header">
-            {{_ "ui.the location" }}:
-          </div>
-          <div class="current-location-name">
-            {{_ game.location.name }}
-          </div>
-        </div>
-
-        <div class="current-role">
-          <div class="current-role-header">
-            {{_ "ui.your role" }}:
-          </div>
-          <div class="current-role-name">
-            {{_ player.role }}
-          </div>
-        </div>
       {{/if}}
     </div>
 
@@ -173,9 +155,9 @@
               Mission Proposed:
             </p>
             <ul>
-              {{#each proposal}}
+              {{#each game.proposal}}
                 <li>
-                  {{this}}
+                  {{name}}
                 </li>
               {{/each}}
             </ul>

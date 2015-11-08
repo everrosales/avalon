@@ -75,8 +75,10 @@ function missionFail(gameID) {
 
 function submitProposal() {
   var game = getCurrentGame();
-  if (Players.find({ 'gameID': Session.get("gameID"), 
-            'isOnProposedMission' : true}).count() == getNumMissionPlayers()) {
+  var proposedPlayers = Players.find({ 'gameID': Session.get("gameID"), 
+            'isOnProposedMission' : true}).fetch();
+  if (proposedPlayers.length == getNumMissionPlayers()) {
+    Games.update(game._id, {$set : {'proposal': proposedPlayers}});
     Games.update(game._id, {$set : 
         {'proposing': false, 'proposedMissionVoting': true}});
   }
@@ -265,6 +267,7 @@ function generateNewGame(){
     //propsal: [],
     approveVotes: null,
     rejectVote: null,
+    proposal: null,
     proposalCount: 0,
     proposing: true,
     proposedMissionVoting: false,
@@ -678,7 +681,7 @@ Template.gameView.events({
     }
   },
   'click .player-name': function (event) {
-    if (getCurrentPlayer().isProposing 
+    if (getCurrentGame().proposing && getCurrentPlayer().isProposing 
         && Players.find({ 'gameID': Session.get("gameID"), 
             'isOnProposedMission' : true}).count() < getNumMissionPlayers()) {
       event.target.className = 'player-name-selected';
