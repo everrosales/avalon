@@ -537,12 +537,11 @@ Template.gameView.events({
   'click .player-name': function (event) {
     if (getCurrentPlayer().isProposing) {
       event.target.className = 'player-name-selected';
-      console.log("name: " + event.target.data);
-      addToProposal(Session.get("gameID"), event.target.data('name'));
+      addToProposal(Session.get("gameID"), event.target.dataset.name);
     }
   },
   'click .player-name-selected': function(event) {
-    removeFromProposal(Session.get("gameID"), event.target.data('name'));
+    removeFromProposal(Session.get("gameID"), event.target.dataset.name);
     event.target.className = 'player-name';
   },
   'click .location-name': function (event) {
