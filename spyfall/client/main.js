@@ -22,6 +22,24 @@ function getNumMissionPlayers() {
   return numOnMission[Players.find({'gameID': game._id}).fetch().length][i];
 }
 
+function checkGameEndCondition() {
+  var game = getCurrentGame();
+  var passes = 0;
+  var fails = 0;
+  game.rounds.forEach(function(round) {
+    if (round == 'pass') {
+      passes++;
+    } else {
+      fails++;
+    }
+  });
+  if (passes > 2) {
+    endGame('resistance');
+  } else if (fails > 2) {
+    endGame('spy');
+  }
+}
+
 function rotateProposal(accessCode) {
   var game = Games.find({'accessCode':accessCode}).fetch()[0];
   var proposedPlayers = Players.find({'gameID': game._id, 'isOnProposedMission':true}).fetch();
@@ -50,9 +68,10 @@ function missionPass(gameID) {
   }, 0);
   game.rounds[round] = "pass";
   Games.update(game._id, {$set: {rounds: game.rounds}});
-  if (round == 4) {
-    endGame(accessCode);
-  }
+  checkGameEndCondition();
+  // if (round == 4) {
+  //   endGame(accessCode);
+  // }
   Games.update(game._id, {$set : {'proposalCount': 0}});
   rotateProposal(game.accessCode);
 }
@@ -68,9 +87,10 @@ function missionFail(gameID) {
   }, 0);
   game.rounds[round] = "fail";
   Games.update(game._id, {$set: {rounds: game.rounds}});
-  if (round == 4) {
-    endGame(game.accessCode);
-  }
+  checkGameEndCondition();
+  // if (round == 4) {
+  //   endGame(game.accessCode);
+  // }
   Players.find({'gameID': Session.get('gameID'), 'isOnProposedMission':true}).forEach(function(player) {
     Players.update(player._id, {$set: {'isOnProposedMission': false}});
   });
@@ -128,10 +148,6 @@ function proposalRejected(gameID) {
   rotateProposal(game.accessCode);
 }
 
-function beginApprovalVoting() {
-
-}
-
 function beginMissionVoting(gameID) {
   // Assumes that a proposal was approved and was thus set
   var game = Games.find(gameID).fetch()[0];
@@ -145,8 +161,10 @@ function beginMissionVoting(gameID) {
   Games.update(game._id, {$set : {'proposing': false, 'proposedMissionVoting': false, 'mission': true}});
 }
 
-function endGame(accessCode) {
-  // Do victory/ loss and reveal who is what role
+function endGame(victor) {
+  // Do victory/loss and reveal who is what role
+  var game = getCurrentGame();
+  Games.update(game._id, {$set: {'victor': victor}});
 }
 
 function initUserLanguage() {
@@ -270,6 +288,7 @@ function generateNewGame(){
     proposedMissionVoting: false,
     mission: false,
     numOnMission: 0,
+    victor: null,
 
     onMission: null
   };
@@ -673,6 +692,12 @@ Template.gameView.helpers({
   },
   numPlayersNeededOnMission: function() {
     return getNumMissionPlayers();
+  },
+  gameEnd: function() {
+    return getCurrentGame().victor != null;
+  },
+  spyVictory: function() {
+    return getCurrentGame().victor;
   }
 });
 

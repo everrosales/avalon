@@ -1,6 +1,6 @@
 <head>
   <meta charset="utf-8">
-  <title>Spyfall</title>
+  <title>Avalon</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
@@ -52,7 +52,7 @@
     <span>{{ game.accessCode }}</span>
   </div>
 
-  <div class="access-buttons">
+  <!-- <div class="access-buttons">
     <a class="access-button btn-toggle-qrcode" href="javascript:void(0);">
       <i class="fa fa-qrcode"></i>
     </a>
@@ -62,15 +62,15 @@
     <a class="access-button btn-send-access-code-email" href='mailto:?subject={{_ "ui.join my spyfall game" }}&body={{ accessLink }}'>
       <i class="fa fa-envelope-o"></i>
     </a>
-  </div>
+  </div> -->
 
-  <div class="qrcode-container" style="display: none;">
+  <!-- <div class="qrcode-container" style="display: none;">
     <div id="qrcode" class="qrcode"></div>
 
     <div id="access-link" class="access-link">
       <a href="{{ accessLink }}">{{ accessLink }}</a>
     </div>
-  </div>
+  </div> -->
 
   <hr>
 
@@ -286,7 +286,7 @@
 
 <template name="footer">
   <div class="footer">
-    {{{_ "ui.footer" }}}
+    Forked from spyfall by <a href="https://github.com/evanbrumley" target="_blank">evanbrumley</a>
     <br>
     <a href="https://github.com/evanbrumley/spyfall" target="_blank">https://github.com/evanbrumley/spyfall</a>
   </div>
