@@ -28,9 +28,7 @@ function rotateProposal(accessCode) {
   proposedPlayers.forEach(function(player) {
     Players.update(player._id, {$set : {'isOnProposedMission': false}});
   });
-  //Games.update(game._id, {$set: {'proposal': []}});
   var players = Players.find({'gameID': game._id}, {'sort': {'name': 1}}).fetch();
-  //var currentProposalPlayer;
   var i;
   for (i = 0; i < players.length; i++) {
     if (players[i].isProposing) {
@@ -104,18 +102,25 @@ function toggleFromProposal(gameID, username) {
 }
 
 function proposalApproved(gameID) {
+  console.log('proposal approved');
   var game = Games.find(gameID).fetch()[0];
   Games.update(game._id, {$set : {'proposalCount': 0}});
   beginMissionVoting(gameID);
 }
 
 function proposalRejected(gameID) {
+  console.log('proposal rejected');
   var game = Games.find(gameID).fetch()[0];
   if (game.proposalCount == 4) {
-    missionFail(gameID);
+    missionFail(game.accessCode);
     return;
   }
-  Games.update(game._id, {$set: {'proposalCount': ++game.proposalCount}});
+  Players.find({'gameID': Session.get('gameID'), 'isOnProposedMission':true}).fetch().forEach(function(player) {
+    Players.update(player._id, {$set: {'isOnProposedMission': false}});
+  });
+  Games.update(game._id, {$set :
+      {'proposing': true, 'proposedMissionVoting': false, 'proposalCount': ++game.proposalCount}});
+  //Games.update(game._id, {$set: {'proposalCount': ++game.proposalCount}});
   rotateProposal(game.accessCode);
 }
 
@@ -128,10 +133,10 @@ function beginMissionVoting(gameID) {
   var game = Games.find(gameID).fetch()[0];
   //var playersOnMission = games.propsal;
   Players.find({'gameID': game._id, 'isOnProposedMission': false}).fetch().forEach(function (player) {
-    Players.update(player._id, {$set: {'isOnMission': false, 'voted': false, 'approvalVote': null}});
+    Players.update(player._id, {$set: {'isOnMission': false}});
   });
   Players.find({'gameID': game._id, 'isOnProposedMission': true}).fetch().forEach(function (player) {
-    Players.update(player._id, {$set: {'isOnMission': true, 'voted': false, 'approvalVote': null}});
+    Players.update(player._id, {$set: {'isOnMission': true}});
   });
   Games.update(game._id, {$set : {'proposing': false, 'proposedMissionVoting': false, 'mission': true}});
 }
@@ -714,6 +719,8 @@ Template.gameView.events({
   'click .proposalVote': function(event) {
     Players.update(getCurrentPlayer()._id, {$set: {'voted': true,
         'approvalVote': event.target.dataset.value}});
+    console.log(Players.find({ 'gameID': Session.get("gameID"),
+        'voted' : false}).count());
     if (Players.find({ 'gameID': Session.get("gameID"),
         'voted' : false}).count() == 0) {
       var players = Players.find({ 'gameID': Session.get("gameID")}).fetch();
@@ -726,6 +733,9 @@ Template.gameView.events({
           rejects++;
         }
       }
+      Players.find({'gameID': Session.get('gameID')}).fetch().forEach(function(player) {
+        Players.update(player._id, {$set: {'voted': false, 'approvalVote': null}});
+      });
       if (approves > rejects) {
         proposalApproved(Session.get("gameID"));
       } else {
