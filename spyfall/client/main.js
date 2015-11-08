@@ -428,7 +428,6 @@ Template.lobby.helpers({
   },
   notEnoughPeople: function() {
     var game = getCurrentGame();
-    console.log("here: " + Players.find({gameID: game._id}).fetch().length);
     return Players.find({gameID: game._id}).fetch().length < 5;
   }
 });
