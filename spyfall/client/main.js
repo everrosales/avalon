@@ -672,10 +672,16 @@ Template.gameView.events({
     }
   },
   'click .player-name': function (event) {
-    if (getCurrentPlayer().isProposing) {
+    if (getCurrentPlayer().isProposing 
+        && Players.find({ 'gameID': Session.get("gameID"), 
+            'isOnProposedMission' : true}).count() < getNumMissionPlayers()) {
       event.target.className = 'player-name-selected';
       addToProposal(Session.get("gameID"), event.target.dataset.name);
     }
+  },
+  'click .first-player-indicator': function (event) {
+    event.cancelBubble = true;
+    event.stopPropagation();
   },
   'click .player-name-selected': function(event) {
     removeFromProposal(Session.get("gameID"), event.target.dataset.name);
