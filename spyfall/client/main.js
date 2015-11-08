@@ -29,7 +29,7 @@ function checkGameEndCondition() {
   game.rounds.forEach(function(round) {
     if (round == 'pass') {
       passes++;
-    } else {
+    } else if (round == 'fail') {
       fails++;
     }
   });
