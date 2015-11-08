@@ -204,7 +204,7 @@
   <ul class="ingame-player-list">
     {{#each players }}
       <li>
-        <div class="player-name" data-name="{{name}}">
+        <div class="player-name{{#if isOnProposedMission}} player-name-selected{{/if}}" data-name="{{name}}">
           {{ name }}
           {{#if player.isSpy}}
             {{#if isSpy }}

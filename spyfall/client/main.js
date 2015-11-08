@@ -696,7 +696,7 @@ Template.gameView.events({
     if (getCurrentGame().proposing && getCurrentPlayer().isProposing
         && Players.find({ 'gameID': Session.get("gameID"),
             'isOnProposedMission' : true}).count() < getNumMissionPlayers()) {
-      event.target.className = 'player-name-selected';
+      //event.target.className = 'player-name-selected';
       addToProposal(Session.get("gameID"), event.target.dataset.name);
     }
   },
