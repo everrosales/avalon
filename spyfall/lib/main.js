@@ -1,4 +1,4 @@
-var numOnMission = {
+/*var numOnMission = {
      5: [2,3,2,3,3],
      6: [2,3,4,3,4],
      7: [2,3,3,4,4],
@@ -70,19 +70,20 @@ function missionFail(gameID) {
 }
 
 function submitProposal() {
-
 }
-
-function addToProposal(gameID, username) {
+*/
+/*
+var addToProposal = function(gameID, username) {
   var player = Players.find({'name': username, 'gameID': gameID}).fetch()[0];
   Players.update(player._id, {$set: {'isOnProposedMission': true}});
   /*var game = Games.find({'accessCode': gameID}).fetch()[0];
   var proposedPlayers = game.proposal;
   proposedPlayers.push(username);
   game.update(game._id, {$set: {'proposal': proposedPlayers}});*/
-}
+/*
+};
 
-function removeFromProposal(gameID, username) {
+var removeFromProposal = function(gameID, username) {
   var player = Players.find({'name': username, 'gameID': gameID}).fetch()[0];
   Players.update(player._id, {$set: {'isOnProposedMission': false}});
   /*var game = Games.find({'accessCode': gameID}).fetch()[0];
@@ -92,7 +93,8 @@ function removeFromProposal(gameID, username) {
     delete proposedPlayers[targetPlayer];
   }
   game.update(game._id, {$set: {'proposal': proposedPlayers}});*/
-}
+/*
+};
 
 function toggleFromProposal(gameID, username) {
   var player = Players.find({'name': username, 'gameID': gameID}).fetch()[0];
@@ -136,3 +138,4 @@ function beginMissionVoting(gameID) {
 function endGame(gameID) {
 
 }
+*/
