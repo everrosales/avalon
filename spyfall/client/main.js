@@ -285,7 +285,7 @@ function generateNewPlayer(game, name){
     isProposing: false,
     isOnProposedMission: false,
     voted: false,
-    approvalVote: false,
+    approvalVote: null,
     isOnMission: false,
   };
 
@@ -654,6 +654,15 @@ Template.gameView.helpers({
   proposedPlayers: function () {
     var proposedPlayers = Players.find({'gameID': Session.get("gameID"), 'isOnProposedMission': true}).fetch();
     return proposedPlayers;
+  },
+  numApprovalVotes: function() {
+    return Players.find({'gameID': Session.get('gameID'), 'approvalVote': 'approve'}).count();
+  },
+  numRejectVotes: function() {
+    return Players.find({'gameID': Session.get('gameID'), 'approvalVote': 'reject'}).count();
+  },
+  totalVotesNeeded: function() {
+    return Players.find({'gameID': Session.get('gameID')}).count();
   }
 });
 
@@ -703,16 +712,15 @@ Template.gameView.events({
     submitProposal();
   },
   'click .proposalVote': function(event) {
-    var player = getCurrentPlayer();
-    Players.update(player._id, {$set: {'voted': true, 
-        'approvalVote': event.target.dataset.value == "approve"}});
-    if (Players.find({ 'gameID': Session.get("gameID"), 
+    Players.update(player._id, {$set: {'voted': true,
+        'approvalVote': event.target.dataset.value}});
+    if (Players.find({ 'gameID': Session.get("gameID"),
         'voted' : false}).count() == 0) {
       var players = Players.find({ 'gameID': Session.get("gameID")}).fetch();
       var approves = 0;
       var rejects = 0;
       for (var i = 0; i < players.length; ++i) {
-        if (players[i].approvalVote) {
+        if (players[i].approvalVote == 'approve') {
           approves++;
         } else {
           rejects++;
