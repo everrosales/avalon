@@ -4,7 +4,7 @@ This project was forked from [http://github.com/evanbrumley/spyfall](http://gith
 
 Massive thanks for evanbrumley for creating the project.
 
-This is the code that is live at [http://avalongame.meteor.com/](http://avalongame.meteor.com). This was initial built during YHack 2015. It was a hackathon, dont expect much.
+This is the code that is live at [http://avalonthegame.meteor.com/](http://avalonthegame.meteor.com). This was initial built during YHack 2015. It was a hackathon, dont expect much.
 
 ## Disclaimer
 
